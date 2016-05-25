@@ -4,19 +4,14 @@ import javax.inject.Inject
 
 import dao.{DriverInfoDao, UberDriverInfoDao}
 import model.{DriverInfo, UberDriverInfo}
-import play.api._
 import play.api.libs.json.{JsError, JsResult, Json}
 import play.api.mvc._
 import service.SmsService
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class Application @Inject() (uberDriverInfoDao: UberDriverInfoDao, driverInfoDao: DriverInfoDao, sms: SmsService) extends Controller {
-
-  def index = Action {
-    Ok(view.html.index("Your new application is ready."))
-  }
 
   def driver = Action { request =>
     val subDomain = request.domain.split('.').headOption
@@ -59,4 +54,5 @@ class Application @Inject() (uberDriverInfoDao: UberDriverInfoDao, driverInfoDao
       case None => Future.successful(NotFound("Could not sms, maybe number incorrect?"))
     }
   }
+
 }

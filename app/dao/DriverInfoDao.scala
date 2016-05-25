@@ -1,5 +1,7 @@
 package dao
 
+import javax.inject.Inject
+
 import com.google.inject.ImplementedBy
 import model.{DriverBio, DriverInfo, UberUserInfo, UserInfo}
 
@@ -12,14 +14,11 @@ trait DriverInfoDao {
   def findByFirstName(firstName: String): Option[DriverInfo]
 }
 
-class DriverInfoDaoImpl extends DriverInfoDao {
+class DriverInfoDaoImpl @Inject() (userInfoDao: UserInfoDao) extends DriverInfoDao {
   var driverInfo: Seq[DriverInfo] = List(
     DriverInfo(
       DriverBio("I like Apple, photography, drones, Coca-Cola, and KFC."),
-      UserInfo(
-        "0612345678",
-        UberUserInfo("Steven", "", "steven@isdriving.me", "http://grible.co/images/team/99ade73c.steven.jpg", "1")
-      )
+      userInfoDao.fetch().head
     )
   )
 
