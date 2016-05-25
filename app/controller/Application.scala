@@ -31,4 +31,8 @@ class Application @Inject() (driverDao: DriverDao) extends Controller {
       }
     )
   }
+
+  def sendSMS = Action {
+    Ok()
+  }
 }
