@@ -1,27 +1,27 @@
 package dao
 
 import com.google.inject.ImplementedBy
-import model.Driver
+import model.UberDriverInfo
 
 @ImplementedBy(classOf[DriverDaoImpl])
 trait DriverDao {
 
-  def fetch(): Seq[Driver]
+  def fetch(): Seq[UberDriverInfo]
 
-  def findByNumber(telephoneNumber: String): Option[Driver]
+  def findByNumber(telephoneNumber: String): Option[UberDriverInfo]
 
-  def add(driver: Driver): Unit
+  def add(driver: UberDriverInfo): Unit
 }
 
 class DriverDaoImpl extends DriverDao {
 
-  var drivers: Seq[Driver] = List(
-    Driver("Steven", "0612345678", 5, "http://grible.co/images/team/99ade73c.steven.jpg")
+  var drivers: Seq[UberDriverInfo] = List(
+    UberDriverInfo("Steven", "0612345678", 5, "http://grible.co/images/team/99ade73c.steven.jpg")
   )
 
   def fetch() = drivers
 
   def findByNumber(phoneNumber: String) = drivers.find(_.phoneNumber == phoneNumber)
 
-  def add(driver: Driver) = drivers = drivers :+ driver
+  def add(driver: UberDriverInfo) = drivers = drivers :+ driver
 }
