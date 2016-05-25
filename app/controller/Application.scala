@@ -2,22 +2,24 @@ package controller
 
 import javax.inject.Inject
 
-import dao.DriverDao
+import dao.{DriverInfoDao, UberDriverInfoDao}
 import model.UberDriverInfo
 import play.api._
 import play.api.libs.json.{JsError, JsResult, Json}
 import play.api.mvc._
 
-class Application @Inject() (driverDao: DriverDao) extends Controller {
+class Application @Inject() (uberDriverInfoDao: UberDriverInfoDao, driverInfoDao: DriverInfoDao) extends Controller {
 
   def index = Action { request =>
-    println(request.host)
-
     Ok(view.html.index("Your new application is ready."))
   }
 
+  def driver = Action {
+    Ok(view.html.driver(driverInfoDao.fetch().head))
+  }
+
   def drivers = Action {
-    Ok(Json.toJson(driverDao.fetch()))
+    Ok(Json.toJson(uberDriverInfoDao.fetch()))
   }
 
   def addDriver = Action(BodyParsers.parse.json) { request =>
@@ -28,7 +30,7 @@ class Application @Inject() (driverDao: DriverDao) extends Controller {
         BadRequest(JsError.toJson(errors))
       },
       driver => {
-        driverDao.add(driver)
+        uberDriverInfoDao.add(driver)
         Ok("")
       }
     )

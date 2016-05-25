@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET     /                           controller.Application.index
+GET     /                           controller.Application.driver
 GET     /drivers                    controller.Application.drivers
 POST    /drivers                    controller.Application.addDriver
 

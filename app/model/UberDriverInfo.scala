@@ -2,20 +2,38 @@ package model
 
 import play.api.libs.json._
 
+// Info about the driver that is retrieved from /v1/requests/current once a trip starts
 case class UberDriverInfo(name: String, phoneNumber: String, rating: Int, pictureUrl: String)
 
 object UberDriverInfo {
-  implicit val driverModelFormat = Json.format[UberDriverInfo]
+  implicit val uberDriverInfoFormat = Json.format[UberDriverInfo]
 }
 
-case class DriverInfo(phoneNumber: String, driverBio: DriverBio)
+// Info about the driver/user that we obtain once he logs in with his Uber-account in our application
+case class UberUserInfo(firstName: String, lastName: String, email: String, picture: String, uuid: String)
 
-object DriverInfo {
-  implicit val driverModelFormat = Json.format[DriverInfo]
+object UberUserInfo {
+  implicit val uberUserInfoFormat = Json.format[UberUserInfo]
 }
 
+// Info about the user plus telephone number, obtained during registration in our application
+case class UserInfo(phoneNumber: String, uberUserInfo: UberUserInfo)
+
+object UserInfo {
+  implicit val userInfoFormat = Json.format[UserInfo]
+}
+
+// Additional info that we collect about the driver once he registers in our application
 case class DriverBio(bio: String)
 
 object DriverBio {
-  implicit val driverBioModelFormat = Json.format[DriverBio]
+  implicit val driverBioFormat = Json.format[DriverBio]
 }
+
+// Object containing all the information that we collected from the driver
+case class DriverInfo(driverBio: DriverBio, userInfo: UserInfo)
+
+object DriverInfo {
+  implicit val driverInfoFormat = Json.format[DriverInfo]
+}
+
