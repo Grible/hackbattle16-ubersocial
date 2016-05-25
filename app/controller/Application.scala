@@ -35,4 +35,8 @@ class Application @Inject() (uberDriverInfoDao: UberDriverInfoDao, driverInfoDao
       }
     )
   }
+
+  def sendSMS = Action {
+    Ok()
+  }
 }
