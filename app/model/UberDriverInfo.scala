@@ -15,8 +15,8 @@ case class UberUserInfo(firstName: String, lastName: String, email: String, pict
 
 object UberUserInfo {
   implicit val uberUserInfoWrites: Writes[UberUserInfo] = (
-    (JsPath \ "firstName").write[String] and
-    (JsPath \ "lastName").write[String] and
+    (JsPath \ "first_name").write[String] and
+    (JsPath \ "last_name").write[String] and
     (JsPath \ "email").write[String] and
     (JsPath \ "picture").write[String] and
     (JsPath \ "uuid").write[String]
