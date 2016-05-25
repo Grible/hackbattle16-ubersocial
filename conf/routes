@@ -3,12 +3,14 @@
 # ~~~~
 
 # Home page
-GET     /                           controller.Application.index
+GET     /                           controller.Application.driver
+GET     /drivers                    controller.Application.drivers
+POST    /drivers                    controller.Application.addDriver
+GET		/sms						controller.Application.sendSMS
 
 # Uber connect
 GET     /connect                    controller.UberAuthenticationController.index
+GET     /hookmeup                   controller.UberAuthenticationController.confirmAuth
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
-
-    

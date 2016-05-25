@@ -1,0 +1,19 @@
+@import model.DriverInfo
+@(driverInfo: DriverInfo)
+
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Welcome in my car!</title>
+		<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+		<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+	</head>
+	<body>
+		<article>
+			<h1>Hi, I'm @{driverInfo.userInfo.uberUserInfo.firstName}</h1>
+			<p>@{driverInfo.driverBio.bio}</p>
+		</article>
+	</body>
+</html>

@@ -2,48 +2,50 @@ package controller
 
 import javax.inject.Inject
 
-import play.api.libs.ws.{WSClient, _}
+import dao.{DriverInfoDao, UberDriverInfoDao}
+import model.{DriverInfo, UberDriverInfo}
+
+import play.api.libs.json.{JsError, JsResult, Json}
 import play.api.mvc._
+import service.SmsService
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
-class Application @Inject() (ws: WSClient) extends Controller {
+class Application @Inject() (uberDriverInfoDao: UberDriverInfoDao, driverInfoDao: DriverInfoDao, sms: SmsService) extends Controller {
 
-  def index = Action { implicit request => {
+  def driver = Action { request =>
+    val subDomain = request.domain.split('.').headOption
 
-      val possibleAuthorizationCode: Option[String] = request.getQueryString("code")
-
-      possibleAuthorizationCode match {
-        case Some(code: String) => retrieveUberAccessToken(code)
-        case None =>
-      }
-
-      Ok(view.html.index("Your new application is ready."))
+    subDomain match {
+      case None => NotFound("No driver found")
+      case Some(firstName) =>
+        val maybeDriverInfo: Option[DriverInfo] = driverInfoDao.findByFirstName(firstName)
+        maybeDriverInfo match {
+          case None => NotFound("No driver found")
+          case Some(driverInfo) => Ok(view.html.driver(driverInfo))
+        }
     }
   }
 
-  def retrieveUberAccessToken(authorizationCode: String) = {
+  def drivers = Action {
+    Ok(Json.toJson(uberDriverInfoDao.fetch()))
+  }
 
-      println(authorizationCode)
+  def addDriver = Action(BodyParsers.parse.json) { request =>
+    val driverResult: JsResult[UberDriverInfo] = request.body.validate[UberDriverInfo]
 
-      val url = "https://login.uber.com/oauth/v2/token"
-      val clientId = "wrM46LuAXxFP4CqmeaOX4wlO66g0ZsMI"
-      val clientSecret = "1w0-YUL5d4XMZAhY4yhJWX1G6dWg-YvWTAO3f5kX"
-      val request: WSRequest = ws.url(url)
-
-      val data = Map(
-        "client_secret" -> Seq(clientSecret),
-        "client_id" -> Seq(clientId),
-        "grant_type" -> Seq("authorization_code"),
-        "redirect_uri" -> Seq("http://localhost:9000"),
-        "code" -> Seq(authorizationCode)
-      )
-
-      val futureResponse: Future[WSResponse] = request.post(data)
-
-      futureResponse.onSuccess { case res =>
-        println(res)
+    driverResult.fold(
+      errors => {
+        BadRequest(JsError.toJson(errors))
+      },
+      driver => {
+        uberDriverInfoDao.add(driver)
+        Ok("")
       }
-    }
+    )
+  }
+
+  def sendSMS = Action {
+    Ok(sms.sendTestMessageTo("0031628302534"))
+  }
+
 }
