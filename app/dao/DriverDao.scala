@@ -9,6 +9,8 @@ trait DriverDao {
   def fetch(): Seq[Driver]
 
   def findByNumber(telephoneNumber: String): Option[Driver]
+
+  def add(driver: Driver): Unit
 }
 
 class DriverDaoImpl extends DriverDao {
@@ -20,4 +22,6 @@ class DriverDaoImpl extends DriverDao {
   def fetch() = drivers
 
   def findByNumber(phoneNumber: String) = drivers.find(_.phoneNumber == phoneNumber)
+
+  def add(driver: Driver) = drivers = drivers :+ driver
 }
