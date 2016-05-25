@@ -8,6 +8,8 @@ trait DriverInfoDao {
   def fetch(): Seq[DriverInfo]
 
   def findByNumber(telephoneNumber: String): Option[DriverInfo]
+
+  def findByFirstName(firstName: String): Option[DriverInfo]
 }
 
 class DriverInfoDaoImpl extends DriverInfoDao {
@@ -24,4 +26,6 @@ class DriverInfoDaoImpl extends DriverInfoDao {
   def fetch() = driverInfo
 
   def findByNumber(phoneNumber: String) = driverInfo.find(_.userInfo.phoneNumber == phoneNumber)
+
+  def findByFirstName(firstName: String) = driverInfo.find(_.userInfo.uberUserInfo.firstName equalsIgnoreCase firstName)
 }
