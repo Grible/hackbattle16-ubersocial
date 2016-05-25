@@ -7,8 +7,9 @@ import model.UberDriverInfo
 import play.api._
 import play.api.libs.json.{JsError, JsResult, Json}
 import play.api.mvc._
+import service.SmsService
 
-class Application @Inject() (driverDao: DriverDao) extends Controller {
+class Application @Inject() (driverDao: DriverDao, sms: SmsService) extends Controller {
 
   def index = Action { request =>
     println(request.host)
@@ -35,6 +36,6 @@ class Application @Inject() (driverDao: DriverDao) extends Controller {
   }
 
   def sendSMS = Action {
-    Ok()
+    Ok(sms.sendTestMessageTo("0031628302534"))
   }
 }
