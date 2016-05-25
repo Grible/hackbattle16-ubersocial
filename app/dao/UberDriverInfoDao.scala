@@ -3,8 +3,8 @@ package dao
 import com.google.inject.ImplementedBy
 import model.UberDriverInfo
 
-@ImplementedBy(classOf[DriverDaoImpl])
-trait DriverDao {
+@ImplementedBy(classOf[UberDriverInfoDaoImpl])
+trait UberDriverInfoDao {
 
   def fetch(): Seq[UberDriverInfo]
 
@@ -13,7 +13,7 @@ trait DriverDao {
   def add(driver: UberDriverInfo): Unit
 }
 
-class DriverDaoImpl extends DriverDao {
+class UberDriverInfoDaoImpl extends UberDriverInfoDao {
 
   var drivers: Seq[UberDriverInfo] = List(
     UberDriverInfo("Steven", "0612345678", 5, "http://grible.co/images/team/99ade73c.steven.jpg")
