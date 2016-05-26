@@ -27,12 +27,10 @@ class UberWebhookController @Inject() (uberUserInfoDao: UberUserInfoDao, userInf
           val maybeToken: Option[AccessToken] = uberUserInfoDao.getAccessToken(userInfo.uberUserInfo)
           maybeToken match {
             case Some(token) =>
-              val eventualTrip: Future[Trip] = tripDao.currentTrip(token)
-              eventualTrip.map(trip => {
-                val driverName = trip.driverName
-                println(s"sending SMS to ${userInfo.phoneNumber}, with driver name $driverName") // TODO: actually send SMS here
-                Ok("")
-              })
+              for {
+                trip <- tripDao.currentTrip(token)
+                smsResponse <- sendSms(trip, userInfo)
+              } yield Ok(smsResponse)
             case None => Future.successful(NotFound(""))
           }
         case None => Future.successful(BadRequest(""))
@@ -42,7 +40,7 @@ class UberWebhookController @Inject() (uberUserInfoDao: UberUserInfoDao, userInf
     }
   }}
 
-  def sendSms(trip: Trip, userInfo: UserInfo) = {
+  private def sendSms(trip: Trip, userInfo: UserInfo) = {
     val driverName = trip.driverName
     val driverUrl = driverName.toLowerCase() + ".isdriving.me"
     val message = s"Hi ${userInfo.uberUserInfo.firstName}! I'm $driverName, your driver for today. Learn more about me at $driverUrl"
@@ -50,7 +48,7 @@ class UberWebhookController @Inject() (uberUserInfoDao: UberUserInfoDao, userInf
   }
 
   def dummyStatusUpdated() = Action.async {
-    val trip = Trip("7fca1042-e2f8-42ab-87c1-89b84298265c", "in_progress", "(555)555-5555", "John")
+    val trip = Trip("7fca1042-e2f8-42ab-87c1-89b84298265c", "in_progress", "(555)555-5555", "Bert")
     val user = userInfoDao.fetch().head
     sendSms(trip, user).map(Ok(_))
   }
