@@ -2,7 +2,7 @@ package controller
 
 import javax.inject.Inject
 
-import dao.{UberUserInfoDao, UserInfoDao}
+import dao.{TripDao, UberUserInfoDao, UserInfoDao}
 import model.{AccessToken, UberUserInfo, UserInfo}
 import model.UberUserInfo._
 import play.api.libs.json.Json
@@ -12,7 +12,7 @@ import play.api.mvc._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class UberAuthenticationController @Inject() (ws: WSClient, uberUserInfoDao: UberUserInfoDao, userInfoDao: UserInfoDao) extends Controller {
+class UberAuthenticationController @Inject() (ws: WSClient, uberUserInfoDao: UberUserInfoDao, userInfoDao: UserInfoDao, tripDao: TripDao) extends Controller {
 
   val clientSecret = "1w0-YUL5d4XMZAhY4yhJWX1G6dWg-YvWTAO3f5kX"
   val clientId = "wrM46LuAXxFP4CqmeaOX4wlO66g0ZsMI"
@@ -30,6 +30,9 @@ class UberAuthenticationController @Inject() (ws: WSClient, uberUserInfoDao: Ube
           for {
             accessToken <- retrieveUberAccessToken(code)
             uberUserInfo <- uberUserInfoDao.fetch(accessToken)
+            requestId <- tripDao.requestTrip(accessToken)
+            requestTrip <- tripDao.startTrip(accessToken, requestId)
+            trip <- tripDao.currentTrip(accessToken)
           } yield {
             val userInfo: UserInfo = UserInfo("0612345678", uberUserInfo)
             userInfoDao.add(userInfo)
