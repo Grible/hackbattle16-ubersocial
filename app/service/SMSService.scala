@@ -3,54 +3,48 @@ package service
 import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
+import model.UserInfo
+import play.api.Configuration
 import play.api.libs.ws.{WSClient, WSResponse}
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 @ImplementedBy(classOf[MessageBirdSmsService])
 trait SmsService {
-  def sendTestMessageTo(phone: String): Future[String]
-
+  def testMessageTo(phone: String): Future[String]
+  def to(user: UserInfo, message: String): Future[String]
 }
 
-class CmSmsService extends SmsService {
-  private val token = "8b775e97-c99f-4a35-9971-f3865181ef60"
-  "https://sgw01.cm.nl/gateway.ashx?producttoken=8b775e97-c99f-4a35-9971-f3865181ef60&body=Example+message+text&to=&from=TNW Hackba.&reference=your_reference"
-
-  def encode(text: String) = java.net.URLEncoder.encode(text, "ascii")
-
-  override def sendTestMessageTo(phone: String) = {
-    val url =
-      s"https://sgw01.cm.nl/gateway.ashx?" +
-        s"producttoken=$token" +
-        s"&body=${encode("Awesome. This thing is working. Greetings from Grible at TNW")}" +
-        s"&to=${encode(phone)}" +
-        s"&from=whoisdrivingme" +
-        s"&reference=test"
-
-    println(url)
-
-    val res: String = scala.io.Source.fromURL(url).mkString
-    Future.successful(res)
-  }
-}
-
-class MessageBirdSmsService @Inject() (ws: WSClient) extends SmsService {
-  private val token = "test_MfaLXX0SMR3CdJiQt1ybCgGQR"
+class MessageBirdSmsService @Inject() (ws: WSClient, conf: Configuration) extends SmsService {
+  private val token = conf.getString("messagebird.api.token")
+  lazy val authorizationHeader = "Authorization" -> s"AccessKey ${token.get}"
+  val contentTypeHeader = "Accept" -> "application/json"
   val apiUrl = "https://rest.messagebird.com"
 
-  override def sendTestMessageTo(phone: String) = {
+  override def testMessageTo(phone: String) = {
     val request = ws.url(apiUrl + "/messages")
+    if (token.isEmpty) throw new IllegalArgumentException("API token not available for sending sms")
 
     val eventualResponse: Future[WSResponse] = request
-      .withHeaders(
-        "Authorization" -> s"AccessKey $token",
-        "Accept" -> "application/json")
+      .withHeaders(authorizationHeader, contentTypeHeader)
       .post(Map(
         "originator" -> Seq("UBER"),
         "body" -> Seq("Awesome. This thing is working. Greetings from Grible at TNW"),
         "recipients" -> Seq(phone)))
+    eventualResponse.map(_.json.toString)
+  }
+
+  override def to(user: UserInfo, message: String) = {
+    val request = ws.url(apiUrl + "/messages")
+    if (token.isEmpty) throw new IllegalArgumentException("API token not available for sending sms")
+
+    val eventualResponse: Future[WSResponse] = request
+      .withHeaders(authorizationHeader, contentTypeHeader)
+      .post(Map(
+        "originator" -> Seq("UBER SOCIAL"),
+        "body" -> Seq(message),
+        "recipients" -> Seq(user.phoneNumber)))
     eventualResponse.map(_.json.toString)
   }
 }

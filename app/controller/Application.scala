@@ -47,7 +47,7 @@ class Application @Inject() (uberDriverInfoDao: UberDriverInfoDao, driverInfoDao
 
   def sendSMS = Action.async { request =>
     val maybeEventualString: Option[Future[String]] = request.getQueryString("phone")
-      .map(sms.sendTestMessageTo)
+      .map(sms.testMessageTo)
 
     maybeEventualString match {
       case Some(s) => s.map(Ok(_))
