@@ -1,19 +1,26 @@
 @import model.DriverInfo
 @(driverInfo: DriverInfo)
 
-<!DOCTYPE html>
+@main("Welcome to Play") {
 
-<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<title>Welcome in my car!</title>
-		<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-		<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-	</head>
-	<body>
-		<article>
-			<h1>Hi, I'm @{driverInfo.userInfo.uberUserInfo.firstName}</h1>
-			<p>@{driverInfo.driverBio.bio}</p>
-		</article>
-	</body>
-</html>
+	<article>
+		<h1>Hi, I'm @{driverInfo.userInfo.uberUserInfo.firstName}</h1>
+		<p>@{driverInfo.driverBio.bio}</p>
+	</article>
+
+		<!-- Swiper -->
+	<div class="swiper-container">
+		<div class="swiper-wrapper">
+			<div class="swiper-slide">Likes running</div>
+			<div class="swiper-slide">Has two children</div>
+			<div class="swiper-slide">Travels to India multiple times a year</div>
+			<div class="swiper-slide">Apple Fan</div>
+			<div class="swiper-slide">Used to be a professional cricket player</div>
+		</div>
+	</div>
+
+	<script>
+		var swiper = new Swiper('.swiper-container');
+	</script>
+
+}
