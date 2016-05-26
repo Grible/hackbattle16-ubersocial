@@ -3,14 +3,18 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>@title</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/reset.css")">
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/styles.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-        @*<script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>*@
-    </head>
-    <body>
-        @content
-    </body>
+	<head>
+		<title>@title</title>
+		<link rel="stylesheet" media="screen" href="@routes.Assets.at("components/HTML5-Reset/assets/css/reset.css")">
+		<link rel="stylesheet" media="screen" href="@routes.Assets.at("css/styles.css")">
+		<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+		<script src="@routes.Assets.at("components/angular/angular.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("components/angular-resource/angular-resource.min.js")" type="text/javascript"></script>
+	</head>
+	<body ng-app="ubersocial">
+		@content
+
+		<script src="@routes.Assets.at("js/ubersocial.module.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("js/sample-component/sample.controller.js")" type="text/javascript"></script>
+	</body>
 </html>

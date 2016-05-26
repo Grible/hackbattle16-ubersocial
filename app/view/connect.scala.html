@@ -2,8 +2,13 @@
 
 @main("Welcome to Play") {
 
-    <h1>This is where you connect with Uber</h1>
+    <div ng-controller="SampleController as sample">
+        <h1>This is where you connect with Uber</h1>
 
-    <p>Click <a href="https://login.uber.com/oauth/v2/authorize?client_id=@clientId&response_type=code&scope=profile+history+all_trips+request">here</a> to start the OAuth dance!</p>
+        random number: {{ sample.randomNo }}
+
+        <p>Click <a href="https://login.uber.com/oauth/v2/authorize?client_id=@clientId&response_type=code&scope=profile+history+all_trips+request">
+            here</a> to start the OAuth dance!</p>
+    </div>
 
 }
