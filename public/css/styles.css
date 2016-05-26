@@ -5,7 +5,7 @@ html, body {
 
 body {
   background-color: #17141F;
-  color: white;
+  color: #dddddd;
   font-size: 18px;
   display: -webkit-box;
   display: -moz-box;
@@ -55,13 +55,13 @@ footer {
 .swiper-slide {
   color: black;
   background-color: white;
-  border-radius: 3px; }
+  border-radius: 4px; }
   .swiper-slide img {
     display: block;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
     width: 100%;
     height: auto; }
   .swiper-slide h2 {
-    padding: 2em 0;
+    padding: 2em 1em;
     text-align: center; }
