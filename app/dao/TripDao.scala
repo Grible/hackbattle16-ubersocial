@@ -1,6 +1,7 @@
 package dao
 
 import javax.inject.Inject
+import javax.inject.Singleton
 
 import com.google.inject.ImplementedBy
 import model.{AccessToken, Trip}
@@ -19,14 +20,14 @@ trait TripDao {
   def startTrip(accessToken: AccessToken, requestId: String): Future[Unit]
 }
 
+@Singleton
 class TripDaoImpl @Inject() (ws: WSClient) extends TripDao {
   val url = "https://sandbox-api.uber.com"
 
   def currentTrip(accessToken: AccessToken) = {
     val eventualResponse: Future[WSResponse] = retrieveCurrentTrip(accessToken.accessToken)
 
-    eventualResponse
-      .map(res => Trip((res.json \ "request_id").get.toString()))
+    eventualResponse.map(res => res.json.as[Trip])
   }
 
   private def retrieveCurrentTrip(accessToken: String) = {

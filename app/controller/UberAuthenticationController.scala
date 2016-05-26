@@ -3,7 +3,7 @@ package controller
 import javax.inject.Inject
 
 import dao.{TripDao, UberUserInfoDao, UserInfoDao}
-import model.{AccessToken, UberUserInfo, UserInfo}
+import model.{AccessToken, UserInfo}
 import model.UberUserInfo._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
@@ -50,7 +50,7 @@ class UberAuthenticationController @Inject() (ws: WSClient, uberUserInfoDao: Ube
       "client_id" -> Seq(clientId),
       "grant_type" -> Seq("authorization_code"),
       "code" -> Seq(authorizationCode),
-      "redirect_uri" -> Seq("http://localhost:9000/hookmeup")
+      "redirect_uri" -> Seq("http://localhost:9000/hookmeup") // TODO: change for live
     )
 
     ws.url(url).post(data).map(res => {

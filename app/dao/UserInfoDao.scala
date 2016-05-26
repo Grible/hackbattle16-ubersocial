@@ -1,5 +1,7 @@
 package dao
 
+import javax.inject.Singleton
+
 import com.google.inject.ImplementedBy
 import model.{UberUserInfo, UserInfo}
 
@@ -9,9 +11,12 @@ trait UserInfoDao {
 
   def findByNumber(phoneNumber: String): Option[UserInfo]
 
+  def findById(uuid: String): Option[UserInfo]
+
   def add(userInfo: UserInfo): Unit
 }
 
+@Singleton
 class UserInfoDaoImpl extends UserInfoDao {
   var userInfo = List(
     UserInfo(
@@ -23,6 +28,8 @@ class UserInfoDaoImpl extends UserInfoDao {
   def fetch() = userInfo
 
   def findByNumber(phoneNumber: String) = userInfo.find(_.phoneNumber == phoneNumber)
+
+  def findById(uuid: String) = userInfo.find(_.uberUserInfo.uuid == uuid)
 
   def add(newUserInfo: UserInfo) = userInfo = userInfo :+ newUserInfo
 }

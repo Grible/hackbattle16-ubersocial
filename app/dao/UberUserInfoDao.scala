@@ -1,6 +1,7 @@
 package dao
 
 import javax.inject.Inject
+import javax.inject.Singleton
 
 import com.google.inject.ImplementedBy
 import model.{AccessToken, UberUserInfo}
@@ -12,15 +13,18 @@ import scala.concurrent.ExecutionContext.Implicits.global
 @ImplementedBy(classOf[UberUserInfoDaoImpl])
 trait UberUserInfoDao {
   def fetch(accessToken: AccessToken): Future[UberUserInfo]
+
+  def getAccessToken(uberUserInfo: UberUserInfo): Option[AccessToken]
 }
 
+@Singleton
 class UberUserInfoDaoImpl @Inject() (ws: WSClient) extends UberUserInfoDao {
   val url = "https://api.uber.com/v1/me"
 
-  var uberUserInfo: Map[AccessToken, UberUserInfo] = Map()
+  var uberUserInfoMap: Map[AccessToken, UberUserInfo] = Map()
 
   def fetch(accessToken: AccessToken): Future[UberUserInfo] = {
-    val maybeInfo: Option[UberUserInfo] = uberUserInfo.get(accessToken)
+    val maybeInfo: Option[UberUserInfo] = uberUserInfoMap.get(accessToken)
 
     maybeInfo match {
       case Some(info) =>
@@ -28,8 +32,10 @@ class UberUserInfoDaoImpl @Inject() (ws: WSClient) extends UberUserInfoDao {
       case None =>
         val eventualInfo: Future[UberUserInfo] = retrieveUberUserInfo(accessToken.accessToken)
           .map(_.json.as[UberUserInfo])
-        eventualInfo.map(info => uberUserInfo = uberUserInfo + (accessToken -> info))
-        eventualInfo
+        eventualInfo.map(info => {
+          uberUserInfoMap = uberUserInfoMap + (accessToken -> info)
+          info
+        })
     }
   }
 
@@ -37,5 +43,9 @@ class UberUserInfoDaoImpl @Inject() (ws: WSClient) extends UberUserInfoDao {
     ws.url(url)
       .withHeaders(("Authorization", s"Bearer $accessToken"))
       .get()
+  }
+
+  def getAccessToken(uberUserInfo: UberUserInfo) = {
+    uberUserInfoMap.find(entry => entry._2 == uberUserInfo).map(_._1)
   }
 }
