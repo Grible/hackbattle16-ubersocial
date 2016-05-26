@@ -14,4 +14,6 @@ dist
 /RUNNING_PID
 /.settings
 
-    
+**/.DS_Store
+frontend/node_modules
+frontend/bower_components

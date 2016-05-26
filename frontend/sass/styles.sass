@@ -1,0 +1,16 @@
+@import bourbon/app/assets/stylesheets/bourbon
+
+html, body
+  height: 100%
+
+body
+  +linear-gradient(30deg, purple, green, yellow)
+  font-size: 10em
+  color: magenta
+
+// THIS IS AN EXAMPLE FOR GI
+.container
+  +display(flex)
+
+  .element-to-align-like-float
+    +flex(1)
