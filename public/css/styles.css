@@ -5,7 +5,9 @@ body {
   background-color: purple;
   background-image: -webkit-linear-gradient(-300deg, purple, green, yellow);
   background-image: -webkit-linear-gradient(60deg,purple, green, yellow);
-  background-image: linear-gradient(30deg,purple, green, yellow); }
+  background-image: linear-gradient(30deg,purple, green, yellow);
+  font-size: 10em;
+  color: magenta; }
 
 .container {
   display: -webkit-box;

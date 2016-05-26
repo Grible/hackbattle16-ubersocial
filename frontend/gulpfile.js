@@ -7,7 +7,7 @@ gulp.task('styles', function () {
   var sassOptions = {
     style: 'expanded',
     indentedSyntax: true,
-    includePaths: ['bower_components']
+    includePaths: ['../public/components']
   };
 
   return gulp.src('sass/styles.sass')
