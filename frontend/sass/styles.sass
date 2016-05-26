@@ -1,26 +1,50 @@
 @import bourbon/app/assets/stylesheets/bourbon
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300)
 
 html, body
   height: 100%
+  font-family: 'Open Sans', sans-serif
 
 body
-  // +linear-gradient(30deg, purple, green, yellow)
-  // color: magenta
+  background-color: #17141F
+  color: white
+  font-size: 18px
+
+  +display(flex)
+  +flex-direction(column)
+
+h1, h2
+  font-family: 'Open Sans', sans-serif
+  font-size: 26px
+  font-weight: 300
+
+header
+  padding: 2em 0
+  text-align: center
+section
+  +flex(1)
+  padding: 0 2em
+footer
+
 
 // THIS IS AN EXAMPLE FOR GI
 .container
   +display(flex)
 
-
 .swiper-container
-  width: 500px
-  height: 300px
-  margin: 20px auto
+  margin: 2em auto
 
 .swiper-slide
-  text-align: center
-  font-size: 18px
-  background: pink
   +display(flex)
   justify-content: center
   align-items: center
+  color: black
+  background-color: white
+  border-radius: 3px
+
+  img
+    display: block
+    border-top-radius: 3px
+  h2
+    padding: 2em 0
+    text-align: center
