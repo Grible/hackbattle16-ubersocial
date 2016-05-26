@@ -20,8 +20,8 @@ trait UserInfoDao {
 class UserInfoDaoImpl extends UserInfoDao {
   var userInfo = List(
     UserInfo(
-      "0612345678",
-      UberUserInfo("Steven", "", "steven@isdriving.me", "http://grible.co/images/team/99ade73c.steven.jpg", "1")
+      "31628302534",
+      UberUserInfo("Frank", "Lagendijk", "frank@grible.co", "", "1")
     )
   )
 
