@@ -2,6 +2,7 @@ package dao
 
 import com.google.inject.ImplementedBy
 import model.UberDriverInfo
+import javax.inject.Singleton
 
 @ImplementedBy(classOf[UberDriverInfoDaoImpl])
 trait UberDriverInfoDao {
@@ -13,6 +14,7 @@ trait UberDriverInfoDao {
   def add(driver: UberDriverInfo): Unit
 }
 
+@Singleton
 class UberDriverInfoDaoImpl extends UberDriverInfoDao {
 
   var drivers: Seq[UberDriverInfo] = List(

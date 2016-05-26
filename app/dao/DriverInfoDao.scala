@@ -1,6 +1,7 @@
 package dao
 
 import javax.inject.Inject
+import javax.inject.Singleton
 
 import com.google.inject.ImplementedBy
 import model.{DriverBio, DriverInfo, UberUserInfo, UserInfo}
@@ -14,6 +15,7 @@ trait DriverInfoDao {
   def findByFirstName(firstName: String): Option[DriverInfo]
 }
 
+@Singleton
 class DriverInfoDaoImpl @Inject() (userInfoDao: UserInfoDao) extends DriverInfoDao {
   var driverInfo: Seq[DriverInfo] = List(
     DriverInfo(
