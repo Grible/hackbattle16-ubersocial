@@ -44,15 +44,14 @@ class UberWebhookController @Inject() (uberUserInfoDao: UberUserInfoDao, userInf
 
   def sendSms(trip: Trip, userInfo: UserInfo) = {
     val driverName = trip.driverName
-    val driverUrl = driverName + "isdriving.me"
+    val driverUrl = driverName.toLowerCase() + ".isdriving.me"
     val message = s"Hi ${userInfo.uberUserInfo.firstName}! I'm $driverName, your driver for today. Learn more about me at $driverUrl"
-//    smsService.to(userInfo, message)
+    smsService.to(userInfo, message)
   }
 
-  def dummyStatusUpdated() = Action {
+  def dummyStatusUpdated() = Action.async {
     val trip = Trip("7fca1042-e2f8-42ab-87c1-89b84298265c", "in_progress", "(555)555-5555", "John")
     val user = userInfoDao.fetch().head
-    sendSms(trip, user)
-    Ok("")
+    sendSms(trip, user).map(Ok(_))
   }
 }

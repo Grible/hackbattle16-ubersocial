@@ -20,7 +20,11 @@ class DriverInfoDaoImpl @Inject() (userInfoDao: UserInfoDao) extends DriverInfoD
   var driverInfo: Seq[DriverInfo] = List(
     DriverInfo(
       DriverBio("I like Apple, photography, drones, Coca-Cola, and KFC."),
-      userInfoDao.fetch().head
+      UserInfo("(555)555-5555",
+        UberUserInfo(
+          "John", "", "", "https://d1a3f4spazzrp4.cloudfront.net/uberex-sandbox/images/driver.jpg", ""
+        )
+      )
     )
   )
 
